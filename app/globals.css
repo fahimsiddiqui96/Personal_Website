@@ -379,6 +379,71 @@ main { flex: 1; }
   text-align: center;
 }
 
+/* ---------- Page text reveal/animation styles ---------- */
+/* Use data-reveal, optional types: "words" (default), "chars", "fade" */
+[data-reveal] { display: inline-block; line-height: 1.2; }
+
+/* WORD-level (already used) - staggered slide up */
+.reveal-word {
+  display: inline-block;
+  transform: translateY(12px);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: word-up 420ms cubic-bezier(.2,.8,.2,1) forwards;
+  animation-delay: calc(var(--i,0) * 40ms);
+}
+
+/* CHAR-level - tighter, snappier micro motion */
+.reveal-char {
+  display: inline-block;
+  transform: translateY(6px) scale(0.98);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: char-pop 420ms cubic-bezier(.22,.9,.25,1) forwards;
+  animation-delay: calc(var(--i,0) * 28ms);
+}
+
+/* FADE-level - simple graceful fade + slight rise */
+.reveal-fade {
+  display: inline-block;
+  transform: translateY(8px);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: fade-in 420ms cubic-bezier(.2,.8,.2,1) forwards;
+  animation-delay: calc(var(--i,0) * 30ms);
+}
+
+/* Keyframes */
+@keyframes word-up {
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes char-pop {
+  0%   { transform: translateY(6px) scale(0.98); opacity: 0; }
+  60%  { transform: translateY(-2px) scale(1.02); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes fade-in {
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* small helper: when combining words/chars keep spacing */
+.reveal-word + .reveal-word,
+.reveal-char + .reveal-char { margin-left: 0.28rem; }
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-word,
+  .reveal-char,
+  .reveal-fade {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* convenience utility for JS-split: default var for stagger index */
+.reveal-word, .reveal-char, .reveal-fade { --i: 0; }
+
 @media (max-width: 768px) {
   .career-content {
     grid-template-columns: 1fr;
