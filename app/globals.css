@@ -459,3 +459,8 @@ main { flex: 1; }
   }
 }
 
+/* About page font style */
+.about-page {
+  font-family: "Inter", sans-serif; /* Replace "Inter" with your desired font */
+}
+
